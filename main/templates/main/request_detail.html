@@ -1,0 +1,64 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Запрос #{{ req.pk }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-4">
+  <div>
+    <h2>{{ req }}</h2>
+    <p class="text-muted mb-0">
+      Диапазон цен: <strong>{{ req.min_price }} – {{ req.max_price }} ₽</strong>
+    </p>
+  </div>
+  <div class="d-flex gap-2">
+    <form method="post" action="{% url 'request_analyze' req.pk %}">
+      {% csrf_token %}
+      <button class="btn btn-success">Запустить анализ</button>
+    </form>
+    <a href="{% url 'request_edit' req.pk %}" class="btn btn-outline-secondary">Изменить</a>
+    <form method="post" action="{% url 'request_delete' req.pk %}"
+          onsubmit="return confirm('Удалить этот запрос?')">
+      {% csrf_token %}
+      <button class="btn btn-outline-danger">Удалить</button>
+    </form>
+  </div>
+</div>
+
+{% if analyses %}
+<h5 class="mb-3">Рекомендации по целевым группам</h5>
+<div class="row g-3">
+  {% for a in analyses %}
+  <div class="col-md-6">
+    <div class="card p-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <strong>{{ a.target_group.title }}</strong>
+        <span class="badge {% if a.coefficient >= 0.7 %}bg-success{% elif a.coefficient >= 0.3 %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+          {{ a.coefficient|floatformat:2 }}
+        </span>
+      </div>
+      <div class="coefficient-bar">
+        <div class="coefficient-fill" style="width: {% widthratio a.coefficient 1 100 %}%"></div>
+      </div>
+      {% if a.target_group.min_budget and a.target_group.max_budget %}
+      <div class="text-muted small mt-2">
+        Бюджет группы: {{ a.target_group.min_budget }} – {{ a.target_group.max_budget }} ₽
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+  <p>Рекомендации ещё не сформированы.</p>
+  <form method="post" action="{% url 'request_analyze' req.pk %}">
+    {% csrf_token %}
+    <button class="btn btn-success">Запустить анализ</button>
+  </form>
+</div>
+{% endif %}
+
+<div class="mt-4">
+  <a href="{% url 'request_list' %}" class="btn btn-outline-secondary">← К списку запросов</a>
+</div>
+{% endblock %}

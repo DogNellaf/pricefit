@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card p-4">
+      <h3 class="mb-4">{{ title }}</h3>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label">{{ form.min_price.label }}</label>
+          {{ form.min_price }}
+          {% if form.min_price.errors %}
+          <div class="text-danger small mt-1">{{ form.min_price.errors|join:', ' }}</div>
+          {% endif %}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">{{ form.max_price.label }}</label>
+          {{ form.max_price }}
+          {% if form.max_price.errors %}
+          <div class="text-danger small mt-1">{{ form.max_price.errors|join:', ' }}</div>
+          {% endif %}
+        </div>
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors|join:', ' }}</div>
+        {% endif %}
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+          {% if req %}
+          <a href="{% url 'request_detail' req.pk %}" class="btn btn-outline-secondary">Отмена</a>
+          {% else %}
+          <a href="{% url 'request_list' %}" class="btn btn-outline-secondary">Отмена</a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

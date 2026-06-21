@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Мои запросы{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Мои запросы</h2>
+  <a href="{% url 'request_create' %}" class="btn btn-primary">+ Новый запрос</a>
+</div>
+
+{% if requests %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Мин. цена</th>
+          <th>Макс. цена</th>
+          <th>Дата</th>
+          <th>Рекомендаций</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in requests %}
+        <tr>
+          <td>{{ r.pk }}</td>
+          <td>{{ r.min_price }} ₽</td>
+          <td>{{ r.max_price }} ₽</td>
+          <td>{{ r.created_at }}</td>
+          <td>{{ r.analyses.count }}</td>
+          <td class="text-end">
+            <a href="{% url 'request_detail' r.pk %}" class="btn btn-sm btn-outline-primary">Открыть</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+  <p>У вас пока нет запросов.</p>
+  <a href="{% url 'request_create' %}" class="btn btn-primary">Создать первый запрос</a>
+</div>
+{% endif %}
+{% endblock %}
