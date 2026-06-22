@@ -1,10 +1,8 @@
 # PriceFit
 
-> [Русская версия](README.ru.md)
+> 🇬🇧 English | [🇷🇺 Русский](README.ru.md)
 
 A Django web application for generating target-group recommendations based on price-range matching. Users create price-range requests; the system computes a Jaccard correlation coefficient for each target group and ranks results automatically.
-
----
 
 ## Features
 
@@ -15,65 +13,46 @@ A Django web application for generating target-group recommendations based on pr
 - **Admin panel** — full Django admin interface for data management
 - **Responsive UI** — Bootstrap 5 interface with progress-bar coefficient visualisation
 
----
-
 ## Tech Stack
 
 | Layer | Technology |
-|-------|------------|
+|---|---|
 | Backend | Django 3.2 |
 | Database | SQLite (development) |
 | Frontend | Bootstrap 5 (CDN) |
 | Language | Python 3.8+ |
 
----
+## Requirements
+
+- Python 3.8+
+- pip
 
 ## Installation
 
-1. **Clone the repository**
+```bash
+# Clone the repository
+git clone <repo-url>
+cd Программа
 
-   ```bash
-   git clone <repo-url>
-   cd Программа
-   ```
+# Create and activate a virtual environment
+python -m venv .venv
+source .venv/bin/activate      # Linux / macOS
+.venv\Scripts\activate         # Windows
 
-2. **Create and activate a virtual environment**
+# Install dependencies
+pip install -r requirements.txt
 
-   ```bash
-   python -m venv .venv
-   # Windows
-   .venv\Scripts\activate
-   # macOS / Linux
-   source .venv/bin/activate
-   ```
+# Apply migrations
+python manage.py migrate
 
-3. **Install dependencies**
+# Create a superuser (required to manage target groups)
+python manage.py createsuperuser
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+# Run the development server
+python manage.py runserver
+```
 
-4. **Apply migrations**
-
-   ```bash
-   python manage.py migrate
-   ```
-
-5. **Create a superuser** (required to manage target groups)
-
-   ```bash
-   python manage.py createsuperuser
-   ```
-
-6. **Run the development server**
-
-   ```bash
-   python manage.py runserver
-   ```
-
-   Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
-
----
+The application will be available at `http://127.0.0.1:8000/`.
 
 ## Usage
 
@@ -85,17 +64,25 @@ A Django web application for generating target-group recommendations based on pr
 ### Coefficient interpretation
 
 | Range | Meaning |
-|-------|---------|
+|---|---|
 | 0.7 – 1.0 | Strong match |
 | 0.3 – 0.7 | Partial match |
 | 0.0 – 0.3 | Weak or no match |
 
----
+## Environment Variables
+
+For production deployments, set these environment variables instead of using defaults:
+
+| Variable | Description | Default |
+|---|---|---|
+| `SECRET_KEY` | Django secret key | insecure dev key |
+| `DEBUG` | Enable debug mode (`True`/`False`) | `True` |
+| `ALLOWED_HOSTS` | Comma-separated list of allowed hosts | _(empty)_ |
 
 ## URL Routes
 
 | Method | URL | Description |
-|--------|-----|-------------|
+|---|---|---|
 | GET | `/` | Home / dashboard |
 | GET/POST | `/accounts/register/` | Register new user |
 | GET/POST | `/accounts/login/` | Log in |
@@ -112,8 +99,6 @@ A Django web application for generating target-group recommendations based on pr
 | POST | `/groups/<id>/delete/` | Delete group (staff only) |
 | GET | `/admin/` | Django admin panel |
 
----
-
 ## Running Tests
 
 ```bash
@@ -121,8 +106,6 @@ python manage.py test main
 ```
 
 The test suite covers models, services, forms and views (including authentication and permission checks).
-
----
 
 ## Project Structure
 
@@ -146,8 +129,6 @@ The test suite covers models, services, forms and views (including authenticatio
 ├── requirements.txt
 └── manage.py
 ```
-
----
 
 ## License
 
